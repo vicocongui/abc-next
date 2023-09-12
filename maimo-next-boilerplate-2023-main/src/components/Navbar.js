@@ -1,10 +1,12 @@
 import React from "react";
 import { useAppContext } from "@/contexts/AppContext";
-
+import Link from "next/link";
 const Navbar = () => {
   return (
     <div className="w-full flex   px-10 text-white bg-gradient-to-b from-slate-700/80 h-20 items-center justify-between fixed z-20">
-      <div>Logo</div>
+      <Link href="/">
+        <div>Logo</div>
+      </Link>
       <div className="">
         <button className="block lg:hidden">Hamburg</button>
         <ul className="hidden lg:flex gap-2  ">

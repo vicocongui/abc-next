@@ -67,18 +67,8 @@ const ShowSingleCard = ({ show }) => {
       <section className="w-full h-[40vh]">
         <div className="w-[85%] mx-auto text-center h-full py-10 px-8">
           <h2 className="text-3xl mb-8 uppercase font-bold">Summary</h2>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque,
-            non? Nam nostrum molestiae aperiam eos accusamus quidem iure nemo
-            veritatis cupiditate molestias. Sit sequi itaque amet aliquam totam,
-            accusantium odit. Lorem ipsum dolor sit amet consectetur adipisicing
-            elit. Cumque, non? Nam nostrum molestiae aperiam eos accusamus
-            quidem iure nemo veritatis cupiditate molestias. Sit sequi itaque
-            amet aliquam totam, accusantium odit. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Cumque, non? Nam nostrum molestiae
-            aperiam eos accusamus quidem iure nemo veritatis cupiditate
-            molestias. Sit sequi itaque amet aliquam totam, accusantium odit.
-          </p>
+          <div dangerouslySetInnerHTML={{ __html: show.summary }}></div>
+          <p>Termino en : {show.ended}</p>
         </div>
       </section>
       {/* Filtros */}
@@ -103,8 +93,8 @@ const ShowSingleCard = ({ show }) => {
               {showsFiltrados.length > 0 &&
                 showsFiltrados.map((actualShow, index) => {
                   return (
-                    <SwiperSlide>
-                      <ShowCard actualShow={actualShow} key={index} />
+                    <SwiperSlide key={index}>
+                      <ShowCard actualShow={actualShow} />
                     </SwiperSlide>
                   );
                 })}

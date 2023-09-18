@@ -10,7 +10,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 const ShowSingleCard = ({ show }) => {
-  const { shows, loading } = useAppContext();
+  const { shows, loading, getSeasons, seasons } = useAppContext();
 
   const [showsFiltrados, setShowFiltrados] = useState([]);
   console.log(show.genres, "Show Seleccionado");
@@ -39,6 +39,10 @@ const ShowSingleCard = ({ show }) => {
     console.log(resultFilter, "Result Filter");
     setShowFiltrados(resultFilter);
   }, [shows]);
+
+  useEffect(() => {
+    getSeasons(show.id);
+  }, [show]);
 
   return (
     <div className="relative">
@@ -95,6 +99,28 @@ const ShowSingleCard = ({ show }) => {
                   return (
                     <SwiperSlide key={index}>
                       <ShowCard actualShow={actualShow} />
+                    </SwiperSlide>
+                  );
+                })}
+            </Swiper>
+          </div>
+          <div className="px-2 py-4">
+            <Swiper
+              slidesPerView={5}
+              spaceBetween={25}
+              autoplay={{
+                delay: 2500,
+                disableOnInteraction: false,
+              }}
+              navigation={true}
+              modules={[Pagination, Navigation, Autoplay]}
+              className="mySwiper"
+            >
+              {seasons.length > 0 &&
+                seasons.map((actualSeason, index) => {
+                  return (
+                    <SwiperSlide key={index}>
+                      <span>Temporada: {actualSeason.number}</span>
                     </SwiperSlide>
                   );
                 })}

@@ -12,6 +12,8 @@ const AppContext = createContext();
 export const AppContextProvider = ({ children }) => {
   const [shows, setShows] = useState([]);
   const [show, setShow] = useState({});
+  const [episodes, setEpisodes] = useState([]);
+  const [seasons, setSeasons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showLoading, setShowLoading] = useState(true);
 
@@ -44,6 +46,18 @@ export const AppContextProvider = ({ children }) => {
     }
   }, []);
 
+  const getSeasons = useCallback(async (id) => {
+    setShowLoading(true);
+    try {
+      const season = await axios.get(`https://api.tvmaze.com/shows/${id}/seasons`);
+      console.log("Temporada:",season.data)
+      setSeasons(season.data);
+      setShowLoading(false);
+    } catch (error) {
+      console.log('ERRORRR NO EXISTEN SEASONS');
+    }
+  }, []);
+
 
   return (
     <AppContext.Provider
@@ -53,6 +67,8 @@ export const AppContextProvider = ({ children }) => {
         getShow,
         show,
         showLoading,
+        getSeasons,
+        seasons
       }}
     >
       {children}

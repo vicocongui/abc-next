@@ -10,7 +10,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 const ShowSingleCard = ({ show }) => {
-  const { shows, loading, getSeasons, seasons } = useAppContext();
+  //Ya no usariamos 'seasons' acá... asi que lo saqué 
+  const { shows, loading, getSeasons, episodesBySeason, getEpisodes } =
+    useAppContext();
 
   const [showsFiltrados, setShowFiltrados] = useState([]);
   console.log(show.genres, "Show Seleccionado");
@@ -39,10 +41,15 @@ const ShowSingleCard = ({ show }) => {
     console.log(resultFilter, "Result Filter");
     setShowFiltrados(resultFilter);
   }, [shows]);
-
+// LE agregue que la funcion getSeasons devuelva con un return... 
+// de esa manera esperamos que tenga todas las temporadas y recien se la manda a GetEpisodes
   useEffect(() => {
-    getSeasons(show.id);
-  }, [show]);
+    async function fetchSeasonsAndEpisodes() {
+      const fetchedSeason = await getSeasons(show.id);
+      await getEpisodes(fetchedSeason);
+    }
+    fetchSeasonsAndEpisodes();
+  }, [show.id, getSeasons, getEpisodes]);
 
   return (
     <div className="relative">
@@ -104,7 +111,8 @@ const ShowSingleCard = ({ show }) => {
                 })}
             </Swiper>
           </div>
-          <div className="px-2 py-4">
+          {/* Silencié esto un toque para probar este nuevo mapeo */}
+          {/* <div className="px-2 py-4">
             <Swiper
               slidesPerView={5}
               spaceBetween={25}
@@ -116,16 +124,40 @@ const ShowSingleCard = ({ show }) => {
               modules={[Pagination, Navigation, Autoplay]}
               className="mySwiper"
             >
-              {seasons.length > 0 &&
-                seasons.map((actualSeason, index) => {
+              {episodesBySeason.length > 0 && //[ [ 8 el],[ 8 el],[ 8 el],[ 8 el],[ 8 el],[ 8 el],[ 8 el], ]
+                episodesBySeason.map((episode, index) => {
                   return (
                     <SwiperSlide key={index}>
-                      <span>Temporada: {actualSeason.number}</span>
+                      <span>Temporada: - cap:{episode[index].name}</span>
                     </SwiperSlide>
                   );
                 })}
             </Swiper>
-          </div>
+          </div> */}
+          {episodesBySeason.map((seasonEpisodes, index) => (
+            <div key={index}>
+              <h3>Temporada {index + 1}</h3>
+              <Swiper
+                modules={[Autoplay, Pagination, Navigation]}
+                spaceBetween={10}
+                slidesPerView={4}
+                navigation
+                pagination={{ clickable: true }}
+                autoplay={{ delay: 2500, disableOnInteraction: false }}
+              >
+                {seasonEpisodes.map((episode) => (
+                  <SwiperSlide key={episode.id}>
+                    {/* Acá podemos renderizar cada episodio como prefieras */}
+                    <div>
+                      <h4>{episode.name}</h4>
+                      <img src={episode.image?.medium} alt={episode.name} />
+                      {/* <p>{episode.summary}</p> */}
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          ))}
 
           {/* {loading && <p>Loading...</p>} */}
         </section>

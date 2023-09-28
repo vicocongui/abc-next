@@ -10,7 +10,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 const ShowSingleCard = ({ show }) => {
-  //Ya no usariamos 'seasons' acá... asi que lo saqué 
+  //Ya no usariamos 'seasons' acá... asi que lo saqué
   const { shows, loading, getSeasons, episodesBySeason, getEpisodes } =
     useAppContext();
 
@@ -41,8 +41,8 @@ const ShowSingleCard = ({ show }) => {
     console.log(resultFilter, "Result Filter");
     setShowFiltrados(resultFilter);
   }, [shows]);
-// LE agregue que la funcion getSeasons devuelva con un return... 
-// de esa manera esperamos que tenga todas las temporadas y recien se la manda a GetEpisodes
+  // LE agregue que la funcion getSeasons devuelva con un return...
+  // de esa manera esperamos que tenga todas las temporadas y recien se la manda a GetEpisodes
   useEffect(() => {
     async function fetchSeasonsAndEpisodes() {
       const fetchedSeason = await getSeasons(show.id);
@@ -53,18 +53,41 @@ const ShowSingleCard = ({ show }) => {
 
   return (
     <div className="relative">
-      <Navbar />
+      <Navbar btnBack />
       {/* Hero */}
       <section className="w-full h-screen bg-red-200 relative">
         <div className="">
-          {show.image && (
-            <Image
-              src={show.image?.original}
-              width={680}
-              height={1000}
-              alt={show.name}
-              className="w-full h-screen object-cover"
-            />
+          {!loading ? (
+            <Swiper
+              slidesPerView={1}
+              spaceBetween={5}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              navigation={false}
+              modules={[Pagination, Autoplay]}
+              className="mySwiper"
+            >
+              {episodesBySeason[0] &&
+                episodesBySeason[0].map((actualShow, index) => {
+                  return (
+                    <SwiperSlide key={index}>
+                      {/* <ShowCard actualShow={actualShow} /> */}
+
+                      <Image
+                        src={actualShow.image?.original}
+                        width={680}
+                        height={1000}
+                        alt={actualShow.name}
+                        className="w-full h-screen object-cover"
+                      />
+                    </SwiperSlide>
+                  );
+                })}
+            </Swiper>
+          ) : (
+            <div> CARGANDO....</div>
           )}
           <div className="bg-slate-800/50 absolute top-0 w-full h-screen z-10"></div>
         </div>
@@ -76,7 +99,7 @@ const ShowSingleCard = ({ show }) => {
       </section>
       {/* Summary */}
       <section className="w-full h-[40vh]">
-        <div className="w-[85%] mx-auto text-center h-full py-10 px-8">
+        <div className="w-[85%] mx-auto text-center h-[40vh]  mt-8 overflow-y-scroll py-10 px-8">
           <h2 className="text-3xl mb-8 uppercase font-bold">Summary</h2>
           <div dangerouslySetInnerHTML={{ __html: show.summary }}></div>
           <p>Termino en : {show.ended}</p>
@@ -84,7 +107,7 @@ const ShowSingleCard = ({ show }) => {
       </section>
       {/* Filtros */}
       <section>
-        <h3>Podría Interesarte ekis de</h3>
+        <h3 className="mt-8 px-10 text-4xl">Podría Interesarte ekis de</h3>
 
         <section>
           <h2>Shows</h2>
@@ -138,12 +161,11 @@ const ShowSingleCard = ({ show }) => {
             <div key={index}>
               <h3>Temporada {index + 1}</h3>
               <Swiper
-                modules={[Autoplay, Pagination, Navigation]}
+                modules={[Pagination, Navigation]}
                 spaceBetween={10}
                 slidesPerView={4}
                 navigation
                 pagination={{ clickable: true }}
-                autoplay={{ delay: 2500, disableOnInteraction: false }}
               >
                 {seasonEpisodes.map((episode) => (
                   <SwiperSlide key={episode.id}>

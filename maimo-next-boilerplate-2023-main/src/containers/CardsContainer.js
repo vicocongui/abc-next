@@ -21,7 +21,7 @@ const CardsContainer = () => {
     const resultFilter = shows.filter((el) => el.genres.includes("Thriller"));
     //show es showSeleccionado, show.genres mis generes seleccionados, .every todos mis generos tienen que cumplir ( => )
     const shows2023Filter = shows.filter((shw) => shw.ended?.includes("2023"));
-    
+
     const showsMax2010Filter = shows.filter((shw) => {
       if (shw.ended) {
         const year = new Date(shw.ended).getFullYear();
@@ -44,12 +44,12 @@ const CardsContainer = () => {
         <div className="px-2 py-4">
           <Carrousel showsArray={shows} />
 
-          <div>Segundo Carrusel</div>
+          <div id="accion">Segundo Carrusel</div>
 
           <Carrousel showsArray={showsDrama} />
           <div>Tercer Carrusel</div>
           <Carrousel showsArray={shows2023} />
-          <div>Cuarto Carrusel max 2010</div>
+          <div id="drama">Cuarto Carrusel max 2010</div>
           <Carrousel showsArray={showsMax2010} />
         </div>
       )}

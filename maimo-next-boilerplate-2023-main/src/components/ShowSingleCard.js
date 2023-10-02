@@ -13,7 +13,7 @@ const ShowSingleCard = ({ show }) => {
   //Ya no usariamos 'seasons' acá... asi que lo saqué
   const { shows, loading, getSeasons, episodesBySeason, getEpisodes } =
     useAppContext();
-
+  const [textLarge, setTextLarge] = useState(false);
   const [showsFiltrados, setShowFiltrados] = useState([]);
   console.log(show.genres, "Show Seleccionado");
 
@@ -98,12 +98,25 @@ const ShowSingleCard = ({ show }) => {
         </div>
       </section>
       {/* Summary */}
-      <section className="w-full h-[40vh]">
-        <div className="w-[85%] mx-auto text-center h-[40vh]  mt-8 overflow-y-scroll py-10 px-8">
-          <h2 className="text-3xl mb-8 uppercase font-bold">Summary</h2>
-          <div dangerouslySetInnerHTML={{ __html: show.summary }}></div>
+      <section className="w-full h-full ">
+        <div
+          className={`relative w-[85%] mx-auto text-center h-${
+            textLarge ? "full" : "[25vh] "
+          } overflow-hidden  mt-8  py-10 px-8  `}
+        >
+          <h2 className="text-3xl mb-8 uppercase font-bold ">Summary</h2>
+          <div
+            dangerouslySetInnerHTML={{ __html: show.summary }}
+            className=" "
+          ></div>
+
           <p>Termino en : {show.ended}</p>
+          {!textLarge && (
+            <div className="bg-gradient-to-t from-black to-blue-500/5 from-10% to-20% h-[25vh] absolute bottom-0 right-0 left-0 w-full"></div>
+          )}
         </div>
+        <div className=""></div>
+        <button onClick={() => setTextLarge(!textLarge)}>Ver Mas...</button>
       </section>
       {/* Filtros */}
       <section>

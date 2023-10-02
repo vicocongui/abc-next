@@ -16,7 +16,7 @@ const Navbar = ({ btnBack }) => {
             </li>
 
             <li>
-              <Link href="#accion">About</Link>
+              <Link href="/about">About</Link>
             </li>
             <li>
               <a href="#personajes">Personajes</a>
